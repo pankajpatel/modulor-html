@@ -7,6 +7,7 @@ const NODE_TYPES = {
   TEXT_RESULT_NODE: -2,
   PROMISE_NODE: -3,
   ELEMENT_RESULT_NODE: -4,
+  FUNCTION_NODE: -5,
   ELEMENT_NODE: 1,
   ATTRIBUTE_NODE: 2,
   TEXT_NODE: 3,
@@ -191,6 +192,9 @@ export function createHtml(options = {}){
         }
         if(chunkType === 'futureResult'){
           $el.nodeType = NODE_TYPES.PROMISE_NODE;
+        }
+        if(chunkType === 'function'){
+          $el.nodeType = NODE_TYPES.FUNCTION_NODE;
         }
 
         $el[chunkType] = chunk;
@@ -474,6 +478,16 @@ export function createHtml(options = {}){
                 range.replaceChild($sourceElement.element, range.childNodes[0]);
               }
 
+              offset += range.childNodes.length + 1;
+
+              break;
+            }
+          case NODE_TYPES.FUNCTION_NODE:
+            {
+              const range = getRange($targetElement, 'function');
+              $sourceElement.function(range);
+
+              range.update();
               offset += range.childNodes.length + 1;
 
               break;
