@@ -539,3 +539,8 @@ export const render = defaultInstance.render;
 export const r = (...args) => render(html(...args));
 
 export const Template = defaultInstance.Template;
+
+export const until = (promise, defaultContent) => (range) => {
+  render(html`${defaultContent}`, range);
+  promise.then(result => render(html`${result}`, range));
+};
